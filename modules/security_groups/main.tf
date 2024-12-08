@@ -50,26 +50,3 @@ resource "aws_security_group" "ec2" {
     Name = "${var.environment}-ec2-sec-group"
   }
 }
-
-resource "aws_security_group" "postgres" {
-  name        = "${var.environment}-postgres-sec-group"
-  description = "Controls access to PostgreSQL DB"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ec2.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = var.db_egress_cidr
-  }
-  tags = {
-    Name = "${var.environment}-postgres-sec-group"
-  }
-}
